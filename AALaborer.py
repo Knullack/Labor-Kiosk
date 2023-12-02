@@ -36,11 +36,11 @@ def successPopup():
         root.destroy()  # Close the main window
         sys.exit()      # Exit the program
 
-def laborTrack(badgeIDs,laborPath):
+def LT(badgeIDs,laborPath):
     website_url = "https://fcmenu-iad-regionalized.corp.amazon.com/HDC3/laborTrackingKiosk"
     options = Options()
     options.add_argument("--headless")
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome()
     driver.get(website_url)
 
     # Find an input field and type characters
@@ -60,4 +60,38 @@ def laborTrack(badgeIDs,laborPath):
     input_element = driver.find_element('xpath', '//*[@id="trackingBadgeId"]')
     typeAndClick(input_element,badgeIDs)
     successPopup()
-laborTrack('0294423','ICQAPS')
+
+def readExcel():
+    try:
+        importlib.import_module('pandas')
+    except ImportError:
+        print("Pandas is not installed. Installing it now...")
+
+        # Run a script to install Pandas using subprocess
+        try:
+            subprocess.run([sys.executable, '-m', 'pip', 'install', 'pandas'], check=True)
+            import pandas as pd
+        except subprocess.CalledProcessError as e:
+            print(f"Error installing Pandas: {e}")
+            sys.exit(1)
+    import pandas as pd
+    # Specify the path to your Excel file
+    excel_file_path = "C:/Users/nuneadon/Downloads/StaffingBoard_P3.xlsm"
+
+    # Specify the sheet name (if there are multiple sheets)
+    sheet_name = 'DOCK'
+
+    # Specify the range of columns you want to read (M2 through M7)
+    column_range = 'M2:M7'
+
+    # Read the Excel file into a DataFrame
+    df = pd.read_excel(excel_file_path, sheet_name=sheet_name, usecols=column_range)
+
+    # Access the specified column
+    column_data = df['M2']
+
+    # Print or use the data as needed
+    print(column_data)
+
+# LT('','TOTOL')
+readExcel()
