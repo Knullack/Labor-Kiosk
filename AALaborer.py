@@ -22,6 +22,19 @@ def typeAndClick(element, textToType):
     element.send_keys(textToType)
     element.send_keys(Keys.ENTER)
 
+def successPopup():
+    import tkinter as tk
+    from tkinter import messagebox
+
+    # Create the main window
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+
+    # Create a popup window
+    result = messagebox.showinfo("Auto Laborer", "Associate(s) Labor Tracked")
+    if result == 'ok':
+        root.destroy()  # Close the main window
+        sys.exit()      # Exit the program
 
 def laborTrack(badgeIDs,laborPath):
     website_url = "https://fcmenu-iad-regionalized.corp.amazon.com/HDC3/laborTrackingKiosk"
@@ -46,5 +59,5 @@ def laborTrack(badgeIDs,laborPath):
     typeAndClick(input_element,laborPath)
     input_element = driver.find_element('xpath', '//*[@id="trackingBadgeId"]')
     typeAndClick(input_element,badgeIDs)
-    print('f')
+    successPopup()
 laborTrack('0294423','ICQAPS')
