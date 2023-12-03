@@ -1,7 +1,18 @@
 import importlib
 import subprocess
 import sys
-
+#check if pandas is is installed
+try:
+    importlib.import_module('pandas')
+except ImportError:
+    print("Pandas is not installed. Installing it now...")
+    # Run a script to install Pandas using subprocess
+    try:
+        subprocess.run([sys.executable, '-m', 'pip', 'install', 'pandas'], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error installing Pandas: {e}")
+        sys.exit(1)
+import pandas as pd
 # Check if Selenium is installed
 try:
     importlib.import_module('selenium')
@@ -18,7 +29,9 @@ except ImportError:
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-def typeAndClick(element, textToType):
+excel_file_path = "C:/Users/adn51/Downloads/StaffingBoard_P3.xlsm"
+
+def HELPER_typeAndClick(element, textToType):
     element.send_keys(textToType)
     element.send_keys(Keys.ENTER)
 
@@ -36,7 +49,7 @@ def successPopup():
         root.destroy()  # Close the main window
         sys.exit()      # Exit the program
 
-def LT(badgeIDs,laborPath):
+def LT(badgeIDs, laborPath):
     website_url = "https://fcmenu-iad-regionalized.corp.amazon.com/HDC3/laborTrackingKiosk"
     options = Options()
     options.add_argument("--headless")
@@ -45,55 +58,40 @@ def LT(badgeIDs,laborPath):
 
     # Find an input field and type characters
     input_element = driver.find_element('xpath', '//*[@id="calmCode"]')
-    typeAndClick(input_element,laborPath)
+    HELPER_typeAndClick(input_element,laborPath)
 
     elements = driver.find_elements('xpath', '//*[@id="badgeScanGuidance"]/h1')
     if elements:
         loginBadge = '12730876'
         input_element = driver.find_element('xpath', '//*[@id="badgeBarcodeId"]')
-        typeAndClick(input_element,loginBadge)
+        HELPER_typeAndClick(input_element,loginBadge)
 
     # input_element = driver.find_elements('//*[@id="qlInput"]')
     driver.get(website_url)
     input_element = driver.find_element('xpath', '//*[@id="calmCode"]')
-    typeAndClick(input_element,laborPath)
+    HELPER_typeAndClick(input_element,laborPath)
     input_element = driver.find_element('xpath', '//*[@id="trackingBadgeId"]')
-    typeAndClick(input_element,badgeIDs)
+    HELPER_typeAndClick(input_element,badgeIDs)
     successPopup()
 
-def readExcel():
-    try:
-        importlib.import_module('pandas')
-    except ImportError:
-        print("Pandas is not installed. Installing it now...")
-        # Run a script to install Pandas using subprocess
-        try:
-            subprocess.run([sys.executable, '-m', 'pip', 'install', 'pandas'], check=True)
-        except subprocess.CalledProcessError as e:
-            print(f"Error installing Pandas: {e}")
-            sys.exit(1)
-    import pandas as pd
-    # Specify the path to your Excel file
-    excel_file_path = "C:/Users/adn51/Downloads/StaffingBoard_P3.xlsm"
+def getBadges():
+    palletize_AAs = palletizeDock()
+    print(palletize_AAs)
 
-    # Specify the sheet name (if there are multiple sheets)
+def palletizeDock():
+    dataFrameVariable = pd.read_excel(io=excel_file_path, sheet_name='DOCK', usecols="M:M", skiprows=0, nrows=28)
+    badgeIDs = HELPER_convertToSingleLineStr(dataFrameVariable.values)
+    return badgeIDs
 
-    sheet = 'DOCK'
-    # Specify the range of columns you want to read (M2 through M7)
-    column_range = 'M:M'
-    row_skip = 1 # from row 2
-    rowsToGet = 6 # 6 rows down
-
-    # Read the Excel file into a DataFrame
-    df = pd.read_excel(excel_file_path, sheet_name=sheet, usecols=column_range, skiprows=row_skip, nrows=rowsToGet)
-
-    # Access the specified column
-    column_data = df
-
-    # Print or use the data as needed
-    print(column_data)
-
-# LT('','TOTOL')
-readExcel()
+def HELPER_convertToSingleLineStr(input):
+    badgeList = str()
+    for badge in input:
+        n = str(badge)[1:-1]
+        n = n.replace(".","")
+        if n != 'nan':
+            badgeList += n + " "
+    return badgeList
+LT(palletizeDock(),'TOTOL')
+# getBadges()
 # print(sys.path)
 
