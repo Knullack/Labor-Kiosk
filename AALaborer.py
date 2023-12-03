@@ -66,32 +66,34 @@ def readExcel():
         importlib.import_module('pandas')
     except ImportError:
         print("Pandas is not installed. Installing it now...")
-
         # Run a script to install Pandas using subprocess
         try:
             subprocess.run([sys.executable, '-m', 'pip', 'install', 'pandas'], check=True)
-            import pandas as pd
         except subprocess.CalledProcessError as e:
             print(f"Error installing Pandas: {e}")
             sys.exit(1)
     import pandas as pd
     # Specify the path to your Excel file
-    excel_file_path = "C:/Users/nuneadon/Downloads/StaffingBoard_P3.xlsm"
+    excel_file_path = "C:/Users/adn51/Downloads/StaffingBoard_P3.xlsm"
 
     # Specify the sheet name (if there are multiple sheets)
-    sheet_name = 'DOCK'
 
+    sheet = 'DOCK'
     # Specify the range of columns you want to read (M2 through M7)
-    column_range = 'M2:M7'
+    column_range = 'M:M'
+    row_skip = 1 # from row 2
+    rowsToGet = 6 # 6 rows down
 
     # Read the Excel file into a DataFrame
-    df = pd.read_excel(excel_file_path, sheet_name=sheet_name, usecols=column_range)
+    df = pd.read_excel(excel_file_path, sheet_name=sheet, usecols=column_range, skiprows=row_skip, nrows=rowsToGet)
 
     # Access the specified column
-    column_data = df['M2']
+    column_data = df
 
     # Print or use the data as needed
     print(column_data)
 
 # LT('','TOTOL')
 readExcel()
+# print(sys.path)
+
