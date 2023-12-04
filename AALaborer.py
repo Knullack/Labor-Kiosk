@@ -29,7 +29,7 @@ except ImportError:
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-excel_file_path = "C:/Users/adn51/Downloads/StaffingBoard_P3.xlsm"
+excel_file_path = "C:/Users/adn51/Downloads/StaffingBoard_P1.xlsm"
 
 def HELPER_typeAndClick(element, textToType):
     element.send_keys(textToType)
@@ -77,9 +77,54 @@ def LT(badgeIDs, laborPath):
 def getBadges():
     palletize_AAs = palletizeDock()
     print(palletize_AAs)
+    
+def named_range(range_name, excel_path=excel_file_path, ):
+    # palletize_range = 'badges_OB_Line_Load'
+    # UIS_range = 'Badge_UIS_DOCK'
+    range = pd.ExcelFile(excel_path).book.defined_names[range_name].value # returns 'SHEET!$col$row:$col$row'
+    sheet_name = str(range.split('!')[0])
+    column = start_row = str(range.split('!')[1].split('$')[1])
+    start_row = int(range.split('$')[2].split(':')[0])
+    end_row = int(range.split('$')[4].split(':')[0])
+    return {'sheet':sheet_name, 'column':column, 'srow':start_row, 'erow':end_row}
 
-def palletizeDock():
-    dataFrameVariable = pd.read_excel(io=excel_file_path, sheet_name='DOCK', usecols="M:M", skiprows=0, nrows=28)
+def palletize_Dock():
+    range = 'badges_OB_Line_Load'
+    sheet = named_range(range)['sheet']
+    column = named_range(range)['column']
+    srow = named_range(range)['srow']
+    erow = named_range(range)['erow']
+    dataFrameVariable = pd.read_excel(io=excel_file_path, header=None, sheet_name=sheet, usecols=column, skiprows=srow-1, nrows=erow)
+    badgeIDs = HELPER_convertToSingleLineStr(dataFrameVariable.values)
+    return badgeIDs
+
+def UIS_Dock():
+    range = 'badge_UIS_DOCK'
+    sheet = named_range(range)['sheet']
+    column = named_range(range)['column']
+    srow = named_range(range)['srow']
+    erow = named_range(range)['erow']
+    dataFrameVariable = pd.read_excel(io=excel_file_path, header=None, sheet_name=sheet, usecols=column, skiprows=srow-1, nrows=erow)
+    badgeIDs = HELPER_convertToSingleLineStr(dataFrameVariable.values)
+    return badgeIDs
+
+def directed_counts():
+    range_start = 'directedCounts_start'
+    sheet = named_range(range)['sheet']
+    column = named_range(range)['column']
+    srow = named_range(range)['srow']
+    erow = named_range(range)['erow']
+    dataFrameVariable = pd.read_excel(io=excel_file_path, header=None, sheet_name=sheet, usecols=column, skiprows=srow-1, nrows=erow-srow+1)
+    badgeIDs = HELPER_convertToSingleLineStr(dataFrameVariable.values)
+    return badgeIDs
+
+def quality_audits():
+    range = 'quality_audits'
+    sheet = named_range(range)['sheet']
+    column = named_range(range)['column']
+    srow = named_range(range)['srow']
+    erow = named_range(range)['erow']
+    dataFrameVariable = pd.read_excel(io=excel_file_path, header=None, sheet_name=sheet, usecols=column, skiprows=srow-1, nrows=erow)
     badgeIDs = HELPER_convertToSingleLineStr(dataFrameVariable.values)
     return badgeIDs
 
@@ -91,7 +136,8 @@ def HELPER_convertToSingleLineStr(input):
         if n != 'nan':
             badgeList += n + " "
     return badgeList
-LT(palletizeDock(),'TOTOL')
-# getBadges()
-# print(sys.path)
+
+
+# LT(palletizeDock(),'TOTOL')
+quality_audits()
 
