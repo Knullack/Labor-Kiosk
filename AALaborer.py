@@ -75,7 +75,7 @@ def LT(badgeIDs, laborPath):
     successPopup()
 
 def getBadges():
-    palletize_AAs = palletizeDock()
+    palletize_AAs = palletize_Dock()
     print(palletize_AAs)
     
 def named_range(range_start, range_end, excel_path=excel_file_path):
