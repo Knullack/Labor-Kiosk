@@ -78,14 +78,13 @@ def getBadges():
     palletize_AAs = palletizeDock()
     print(palletize_AAs)
     
-def named_range(range_name, excel_path=excel_file_path, ):
-    # palletize_range = 'badges_OB_Line_Load'
-    # UIS_range = 'Badge_UIS_DOCK'
-    range = pd.ExcelFile(excel_path).book.defined_names[range_name].value # returns 'SHEET!$col$row:$col$row'
-    sheet_name = str(range.split('!')[0])
-    column = start_row = str(range.split('!')[1].split('$')[1])
-    start_row = int(range.split('$')[2].split(':')[0])
-    end_row = int(range.split('$')[4].split(':')[0])
+def named_range(range_start, range_end, excel_path=excel_file_path):
+    srange = pd.ExcelFile(excel_path).book.defined_names[range_start].value # returns 'SHEET!$col$row:$col$row'
+    erange = pd.ExcelFile(excel_path).book.defined_names[range_end].value
+    sheet_name = str(srange.split('!')[0])
+    column = str(srange.split('$')[1])
+    start_row = int(srange.split('$')[2].split(':')[0])
+    end_row = int(erange.split('$')[2].split(':')[0])
     return {'sheet':sheet_name, 'column':column, 'srow':start_row, 'erow':end_row}
 
 def palletize_Dock():
@@ -110,10 +109,11 @@ def UIS_Dock():
 
 def directed_counts():
     range_start = 'directedCounts_start'
-    sheet = named_range(range)['sheet']
-    column = named_range(range)['column']
-    srow = named_range(range)['srow']
-    erow = named_range(range)['erow']
+    range_end = 'directedCounts_end'
+    sheet = named_range(range_start, range_end)['sheet']
+    column = named_range(range_start, range_end)['column']
+    srow = named_range(range_start, range_end)['srow']
+    erow = named_range(range_start, range_end)['erow']
     dataFrameVariable = pd.read_excel(io=excel_file_path, header=None, sheet_name=sheet, usecols=column, skiprows=srow-1, nrows=erow-srow+1)
     badgeIDs = HELPER_convertToSingleLineStr(dataFrameVariable.values)
     return badgeIDs
@@ -139,5 +139,5 @@ def HELPER_convertToSingleLineStr(input):
 
 
 # LT(palletizeDock(),'TOTOL')
-quality_audits()
+directed_counts()
 
