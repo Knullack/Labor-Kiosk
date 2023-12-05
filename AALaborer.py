@@ -1,3 +1,4 @@
+import sys
 import importlib
 import subprocess
 import sys
@@ -29,6 +30,8 @@ except ImportError:
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
+
+# file_pattern = 'staffingBoard_P*.xlsm'
 excel_file_path = "C:/Users/adn51/Downloads/StaffingBoard_P1.xlsm"
 
 nrow = { #sheet name > path > role > number of rows down
@@ -79,7 +82,7 @@ nrow = { #sheet name > path > role > number of rows down
 laborPath = { #range-name, path, process, labor-Code
     # PS_ICQA_Learning
     'counts' : ['directedCounts_start','directed counts','ICQAPS'],
-    'pallet rack audits': ['palletRacking_start' 'pallet racking','ICQAQA'],
+    'pallet rack audits': ['palletRacking_start', 'pallet racking','ICQAQA'],
     'SBC': ['SimpleBinCount_start','simple bin counts', 'ICQAQA'],
     'andons':  ['andon_start','andons','ICQAQA'],
     'IBJP' : ['IBJackpot_start','IBJP','IBPS'],
@@ -122,7 +125,7 @@ def HELPER_typeAndClick(element, textToType):
     element.send_keys(textToType)
     element.send_keys(Keys.ENTER)
 
-def successPopup():
+def successPopup(message):
     import tkinter as tk
     from tkinter import messagebox
 
@@ -131,7 +134,7 @@ def successPopup():
     root.withdraw()  # Hide the main window
 
     # Create a popup window
-    result = messagebox.showinfo("Auto Laborer", "Associate(s) Labor Tracked")
+    result = messagebox.showinfo("Auto Laborer", message)
     if result == 'ok':
         root.destroy()  # Close the main window
         sys.exit()      # Exit the program
@@ -195,11 +198,27 @@ def directed_counts():
     return badges(laborPath['counts'][0], laborPath['counts'][1]), laborPath['counts'][2]
 
 def palletRackingAudits():
-    return badges(laborPath['pallet rack audits'][0], laborPath['pallet rack audits'][3])
+    return badges(laborPath['pallet rack audits'][0], laborPath['pallet rack audits'][1]), laborPath['pallet rack audits'][2]
+
+def SBC():
+    return badges(laborPath['SBC'][0],laborPath['SBC'][3])
+
+def andons():
+    return badges(laborPath['andons'][0],laborPath['andons'][3])
 
 def processLaborTracking(function):
     badges, CALM = function()
     # LT(badges,CALM)
+    successPopup(f'Group Labor Tracked: {badges}\nCALM: {CALM}')
 
-processLaborTracking(directed_counts)
+laborSetting = sys.argv[1]
+# laborSetting = 'palletRacking'
+if laborSetting == 'counts':
+    processLaborTracking(directed_counts)
+elif laborSetting == 'palletRacking':
+    processLaborTracking(palletRackingAudits)
+elif laborSetting == 'SBC':
+    processLaborTracking(SBC)
+elif laborSetting == 'andons':
+    processLaborTracking(andons)
 
