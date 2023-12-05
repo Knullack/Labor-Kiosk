@@ -169,34 +169,16 @@ def LT(badgeIDs, laborPath):
     HELPER_typeAndClick(input_element,badgeIDs)
     successPopup()
 
-def getBadges():
-    palletize_AAs = palletize_Dock()
-    print(palletize_AAs)
     
 def named_range(range_start, laborPath_label, excel_path=excel_file_path):
     srange = pd.ExcelFile(excel_path).book.defined_names[range_start].value # returns 'SHEET!$col$row:$col$row'
     sheet_name = str(srange.split('!')[0])
     column = str(srange.split('$')[1])
     start_row = int(srange.split('$')[2].split(':')[0])
-    return {'sheet':sheet_name, 'column':column, 'srow':start_row, 'erow':nrow[sheet_name][laborPath[laborPath_label][1]][laborPath[laborPath_label][2]]}
+    return {'sheet':sheet_name, 'column':column, 'srow':start_row, 'erow':nrow[sheet_name][laborPath_label]}
 
-def palletize_Dock():
-    range_start = 'badges_OB_Line_Load'
-    return badges(range_start)
-
-def UIS_Dock():
-    range_start = 'badge_UIS_DOCK'
-    return badges(range_start)
-
-def directed_counts(CALM):
-    return badges(laborPath['counts'][0])
-
-def palletRackingAudits():
-    range_start = 'palletRacking_start'
-    return badges(range_start)
-
-def badges(range):
-    info = named_range(range, 'counts')
+def badges(range_name, pathlabel):
+    info = named_range(range_name, pathlabel)
     dataFrameVariable = pd.read_excel(io=excel_file_path, header=None, sheet_name=info['sheet'], usecols=info['column'], skiprows=info['srow']-1, nrows=info['erow'])
     badgeIDs = HELPER_convertToSingleLineStr(dataFrameVariable.values)
     return badgeIDs
@@ -210,3 +192,18 @@ def HELPER_convertToSingleLineStr(input):
             badgeList += n + " "
     return badgeList
 
+
+def OBLineLoad():
+    return badges(laborPath['OBLineload'][0],laborPath['OBLineload'][2]), laborPath['OBLineload'][3]
+
+def UIS_Dock():
+    return badges(laborPath['UIS'][0], laborPath['UIS'][3])
+
+def directed_counts():
+    return badges(laborPath['counts'][0]), laborPath['counts'][3]
+
+def palletRackingAudits():
+    return badges(laborPath['pallet rack audits'][0], laborPath['pallet rack audits'][3])
+
+
+print(f'Badges: {OBLineLoad()[0]}\nCALM CODE: {OBLineLoad()[1]}')
