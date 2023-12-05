@@ -33,30 +33,22 @@ excel_file_path = "C:/Users/adn51/Downloads/StaffingBoard_P1.xlsm"
 
 nrow = { #sheet name > path > role > number of rows down
     'PS_ICQA_Learning': {
-        'ICQA': {
-            'directed counts': 10,
-            'pallet racking' : 10,
-            'simple bin counts' : 10,
-            'andons' : 10
-        },
-        'inbound': {
-            'IBJP': 5,
-            'Stow Kiosk': 5,
-            'Damages': 5,
-            'IOL': 5,
-            'Pallets': 5
-        },
-        'outbound':{
-            'OBJP': 5,
-            'runner': 5,
-            'UIS': 5,
-            'CPT Chase': 5,
-            'Pick Skips': 5
-        },
-        'learning':{
-            'general' : 13,
-            'pit': 13
-        }
+        'directed counts': 10,
+        'pallet racking' : 10,
+        'simple bin counts' : 10,
+        'andons' : 10,
+        'IBJP': 5,
+        'Stow Kiosk': 5,
+        'Damages': 5,
+        'IOL': 5,
+        'Pallets': 5,
+        'OBJP': 5,
+        'runner': 5,
+        'UIS': 5,
+        'CPT Chase': 5,
+        'Pick Skips': 5,
+        'general' : 13,
+        'pit': 13
     },
     'PIT': {
         'stow': 99,
@@ -86,22 +78,22 @@ nrow = { #sheet name > path > role > number of rows down
 
 laborPath = { #range-name, path, process, labor-Code
     # PS_ICQA_Learning
-    'counts' : ['directedCounts_start','ICQA','directed counts','ICQAPS'],
-    'pallet rack audits': ['palletRacking_start', 'ICQA', 'pallet racking','ICQAQA'],
-    'SBC': ['SimpleBinCount_start','ICQA','simple bin counts', 'ICQAQA'],
-    'andons':  ['andon_start','ICQA','andons','ICQAQA'],
-    'IBJP' : ['IBJackpot_start','inbound','IBJP','IBPS'],
-    'stowK' : ['stowKiosk_start','inbound','Stow Kiosk','IBPS'],
-    'dmg': ['damage_start','inbound','Damages','IBPS'],
-    'iol': ['IOL_start','inbound','IOL','IBPS'],
-    'palletPS': ['palletPS_start', 'inbound', 'Pallets','IBPS'],
-    'OBJP': ['OBJackpot_start','outbound','OBJP','PSTOPS'],
-    'OBrunner':['OBRunner_start','outbound','runner','PSTOPS'],
-    'UISPS': ['UISPS_start','outbound','UIS','PSTOPS'],
-    'CPT': ['CPTChase_start','outbound','CPT Chase','PSTOPS'],
-    'skips': ['pickSkips_start','outbound','Pick Skips','PSTOPS'],
-    'LearningGeneral': ['learningGeneral_start','learning','general','FCSCH'],
-    'LearningPIT': ['learningPIT_start','learning','pit','PITCLASS'],
+    'counts' : ['directedCounts_start','directed counts','ICQAPS'],
+    'pallet rack audits': ['palletRacking_start' 'pallet racking','ICQAQA'],
+    'SBC': ['SimpleBinCount_start','simple bin counts', 'ICQAQA'],
+    'andons':  ['andon_start','andons','ICQAQA'],
+    'IBJP' : ['IBJackpot_start','IBJP','IBPS'],
+    'stowK' : ['stowKiosk_start','Stow Kiosk','IBPS'],
+    'dmg': ['damage_start','Damages','IBPS'],
+    'iol': ['IOL_start','IOL','IBPS'],
+    'palletPS': ['palletPS_start', 'Pallets','IBPS'],
+    'OBJP': ['OBJackpot_start','OBJP','PSTOPS'],
+    'OBrunner':['OBRunner_start','runner','PSTOPS'],
+    'UISPS': ['UISPS_start','UIS','PSTOPS'],
+    'CPT': ['CPTChase_start','CPT Chase','PSTOPS'],
+    'skips': ['pickSkips_start','Pick Skips','PSTOPS'],
+    'LearningGeneral': ['learningGeneral_start','general','FCSCH'],
+    'LearningPIT': ['learningPIT_start','pit','PITCLASS'],
     # PIT
     'stow': ['stow_start','PIT','stow',''], # stowers don't get labor tracked
     'OBForklift': ['OBForklift_start','PIT','OB forklift',''],                                  # needs labor code
@@ -176,7 +168,7 @@ def named_range(range_start, laborPath_label, excel_path=excel_file_path):
     column = str(srange.split('$')[1])
     start_row = int(srange.split('$')[2].split(':')[0])
     return {'sheet':sheet_name, 'column':column, 'srow':start_row, 'erow':nrow[sheet_name][laborPath_label]}
-
+    
 def badges(range_name, pathlabel):
     info = named_range(range_name, pathlabel)
     dataFrameVariable = pd.read_excel(io=excel_file_path, header=None, sheet_name=info['sheet'], usecols=info['column'], skiprows=info['srow']-1, nrows=info['erow'])
@@ -194,16 +186,20 @@ def HELPER_convertToSingleLineStr(input):
 
 
 def OBLineLoad():
-    return badges(laborPath['OBLineload'][0],laborPath['OBLineload'][2]), laborPath['OBLineload'][3]
+    return badges(laborPath['OBLineload'][0], laborPath['OBLineload'][2]), laborPath['OBLineload'][3]
 
 def UIS_Dock():
     return badges(laborPath['UIS'][0], laborPath['UIS'][3])
 
 def directed_counts():
-    return badges(laborPath['counts'][0]), laborPath['counts'][3]
+    return badges(laborPath['counts'][0], laborPath['counts'][1]), laborPath['counts'][2]
 
 def palletRackingAudits():
     return badges(laborPath['pallet rack audits'][0], laborPath['pallet rack audits'][3])
 
+def processLaborTracking(function):
+    badges, CALM = function()
+    # LT(badges,CALM)
 
-print(f'Badges: {OBLineLoad()[0]}\nCALM CODE: {OBLineLoad()[1]}')
+processLaborTracking(directed_counts)
+
