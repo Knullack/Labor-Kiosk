@@ -134,7 +134,10 @@ def successPopup(message):
     root.withdraw()  # Hide the main window
 
     # Create a popup window
-    result = messagebox.showinfo("Auto Laborer", message)
+    if message == 'Error: Path variable not provided in command':
+        result = messagebox.showwarning('Labor Tracker',message)
+    else:
+        result = messagebox.showinfo('Labor Tracker', message)
     if result == 'ok':
         root.destroy()  # Close the main window
         sys.exit()      # Exit the program
@@ -266,8 +269,13 @@ def processLaborTracking(function):
     # LT(badges,CALM)
     successPopup(f'Group Labor Tracked: {badges}\nCALM: {CALM}')
 
-# laborSetting = sys.argv[1]
-laborSetting = 'SBC'
+try:
+    laborSetting = sys.argv[1]
+except IndexError:
+    successPopup("Error: Path variable not provided in command")
+    # Handle the error or exit the script as needed
+    sys.exit(1)
+
 
 try:
     if laborSetting == 'counts':
@@ -278,29 +286,29 @@ try:
         processLaborTracking(SBC)
     elif laborSetting == 'andons':
         processLaborTracking(andons)
-    elif laborSetting == 'OBJP':
-        processLaborTracking(OBJP)
+    elif laborSetting == 'IBJP':
+        processLaborTracking(IBJP)
     elif laborSetting == 'stowk':
         processLaborTracking(stowK)
     elif laborSetting == 'damage':
         processLaborTracking(damage)
     elif laborSetting == 'IOL':
         processLaborTracking(IOL)
-    elif laborPath == 'palletPS':
+    elif laborSetting == 'palletPS':
         processLaborTracking(palletPS)
-    elif laborPath == 'OBJP':
+    elif laborSetting == 'OBJP':
         processLaborTracking(OBJP)
-    elif laborPath == 'OBRunner':
+    elif laborSetting == 'OBRunner':
         processLaborTracking(OBRunner)
-    elif laborPath == 'UISPS':
+    elif laborSetting == 'UISPS':
         processLaborTracking(UISPS)
-    elif laborPath == 'CPTChase':
+    elif laborSetting == 'CPTChase':
         processLaborTracking(CPTChase)
-    elif laborPath == 'PickSkips':
+    elif laborSetting == 'PickSkips':
         processLaborTracking(pickSkips)
-    elif laborPath == 'LearningGeneral':
+    elif laborSetting == 'LearningGeneral':
         processLaborTracking(learningGeneral)
-    elif laborPath == 'learningPIT':
+    elif laborSetting == 'learningPIT':
         processLaborTracking(learningPIT)
     
 except Exception as e:
