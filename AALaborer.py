@@ -195,30 +195,113 @@ def UIS_Dock():
     return badges(laborPath['UIS'][0], laborPath['UIS'][3])
 
 def directed_counts():
-    return badges(laborPath['counts'][0], laborPath['counts'][1]), laborPath['counts'][2]
+    arg = laborPath['counts']
+    return badges(arg[0], arg[1]), arg[2]
 
 def palletRackingAudits():
-    return badges(laborPath['pallet rack audits'][0], laborPath['pallet rack audits'][1]), laborPath['pallet rack audits'][2]
+    arg = laborPath['pallet rack audits']
+    return badges(arg[0], arg[1]), arg[2]
 
 def SBC():
-    return badges(laborPath['SBC'][0],laborPath['SBC'][3])
+    arg = laborPath['SBC']
+    return badges(arg[0], arg[1]), arg[2]
 
 def andons():
-    return badges(laborPath['andons'][0],laborPath['andons'][3])
+    arg = laborPath['andons']
+    return badges(arg[0], arg[1]), arg[2]
+
+def IBJP():
+    arg = laborPath['IBJP']
+    return badges(arg[0], arg[1]), arg[2]
+
+def OBJP():
+    arg = laborPath['OBJP']
+    return badges(arg[0], arg[1]), arg[2]
+
+def stowK():
+    arg = laborPath['stowK']
+    return badges(arg[0], arg[1]), arg[2]
+
+def damage():
+    arg = laborPath['dmg']
+    return badges(arg[0], arg[1]), arg[2]
+
+def IOL():
+    arg = laborPath['iol']
+    return badges(arg[0], arg[1]), arg[2]
+
+def palletPS():
+    arg = laborPath['palletPS']
+    return badges(arg[0], arg[1]), arg[2]
+
+def OBRunner():
+    arg = laborPath['OBrunner']
+    return badges(arg[0], arg[1]), arg[2]
+
+def UISPS():
+    arg = laborPath['UISPS']
+    return badges(arg[0], arg[1]), arg[2]
+
+def CPTChase():
+    arg = laborPath['CPT']
+    return badges(arg[0], arg[1]), arg[2]
+
+def pickSkips():
+    arg = laborPath['skips']
+    return badges(arg[0], arg[1]), arg[2]
+
+def learningGeneral():
+    arg = laborPath['LearningGeneral']
+    return badges(arg[0], arg[1]), arg[2]
+
+def learningPIT():
+    arg = laborPath['LearningPIT']
+    return badges(arg[0], arg[1]), arg[2]
+
+
+
 
 def processLaborTracking(function):
     badges, CALM = function()
     # LT(badges,CALM)
     successPopup(f'Group Labor Tracked: {badges}\nCALM: {CALM}')
 
-laborSetting = sys.argv[1]
-# laborSetting = 'palletRacking'
-if laborSetting == 'counts':
-    processLaborTracking(directed_counts)
-elif laborSetting == 'palletRacking':
-    processLaborTracking(palletRackingAudits)
-elif laborSetting == 'SBC':
-    processLaborTracking(SBC)
-elif laborSetting == 'andons':
-    processLaborTracking(andons)
+# laborSetting = sys.argv[1]
+laborSetting = 'SBC'
 
+try:
+    if laborSetting == 'counts':
+        processLaborTracking(directed_counts)
+    elif laborSetting == 'palletRacking':
+        processLaborTracking(palletRackingAudits)
+    elif laborSetting == 'SBC':
+        processLaborTracking(SBC)
+    elif laborSetting == 'andons':
+        processLaborTracking(andons)
+    elif laborSetting == 'OBJP':
+        processLaborTracking(OBJP)
+    elif laborSetting == 'stowk':
+        processLaborTracking(stowK)
+    elif laborSetting == 'damage':
+        processLaborTracking(damage)
+    elif laborSetting == 'IOL':
+        processLaborTracking(IOL)
+    elif laborPath == 'palletPS':
+        processLaborTracking(palletPS)
+    elif laborPath == 'OBJP':
+        processLaborTracking(OBJP)
+    elif laborPath == 'OBRunner':
+        processLaborTracking(OBRunner)
+    elif laborPath == 'UISPS':
+        processLaborTracking(UISPS)
+    elif laborPath == 'CPTChase':
+        processLaborTracking(CPTChase)
+    elif laborPath == 'PickSkips':
+        processLaborTracking(pickSkips)
+    elif laborPath == 'LearningGeneral':
+        processLaborTracking(learningGeneral)
+    elif laborPath == 'learningPIT':
+        processLaborTracking(learningPIT)
+    
+except Exception as e:
+    successPopup(e)
