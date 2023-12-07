@@ -271,45 +271,51 @@ def processLaborTracking(function):
 
 try:
     laborSetting = sys.argv[1]
+    badge = sys.argv[2]
+
+    # laborSetting = 'palletRacking'
+    # badge = ''
 except IndexError:
     successPopup("Error: Path variable not provided in command")
     # Handle the error or exit the script as needed
     sys.exit(1)
 
-
-try:
-    if laborSetting == 'counts':
-        processLaborTracking(directed_counts)
-    elif laborSetting == 'palletRacking':
-        processLaborTracking(palletRackingAudits)
-    elif laborSetting == 'SBC':
-        processLaborTracking(SBC)
-    elif laborSetting == 'andons':
-        processLaborTracking(andons)
-    elif laborSetting == 'IBJP':
-        processLaborTracking(IBJP)
-    elif laborSetting == 'stowk':
-        processLaborTracking(stowK)
-    elif laborSetting == 'damage':
-        processLaborTracking(damage)
-    elif laborSetting == 'IOL':
-        processLaborTracking(IOL)
-    elif laborSetting == 'palletPS':
-        processLaborTracking(palletPS)
-    elif laborSetting == 'OBJP':
-        processLaborTracking(OBJP)
-    elif laborSetting == 'OBRunner':
-        processLaborTracking(OBRunner)
-    elif laborSetting == 'UISPS':
-        processLaborTracking(UISPS)
-    elif laborSetting == 'CPTChase':
-        processLaborTracking(CPTChase)
-    elif laborSetting == 'PickSkips':
-        processLaborTracking(pickSkips)
-    elif laborSetting == 'LearningGeneral':
-        processLaborTracking(learningGeneral)
-    elif laborSetting == 'learningPIT':
-        processLaborTracking(learningPIT)
+if (isinstance(badge, (int, float))):
+     LT(str(badge),laborSetting,)
+else:
+    try:
+        if laborSetting == 'counts':
+            processLaborTracking(directed_counts)
+        elif laborSetting == 'palletRacking':
+            processLaborTracking(palletRackingAudits)
+        elif laborSetting == 'SBC':
+            processLaborTracking(SBC)
+        elif laborSetting == 'andons':
+            processLaborTracking(andons)
+        elif laborSetting == 'IBJP':
+            processLaborTracking(IBJP)
+        elif laborSetting == 'stowk':
+            processLaborTracking(stowK)
+        elif laborSetting == 'damage':
+            processLaborTracking(damage)
+        elif laborSetting == 'IOL':
+            processLaborTracking(IOL)
+        elif laborSetting == 'palletPS':
+            processLaborTracking(palletPS)
+        elif laborSetting == 'OBJP':
+            processLaborTracking(OBJP)
+        elif laborSetting == 'OBRunner':
+            processLaborTracking(OBRunner)
+        elif laborSetting == 'UISPS':
+            processLaborTracking(UISPS)
+        elif laborSetting == 'CPTChase':
+            processLaborTracking(CPTChase)
+        elif laborSetting == 'PickSkips':
+            processLaborTracking(pickSkips)
+        elif laborSetting == 'LearningGeneral':
+            processLaborTracking(learningGeneral)
+        elif laborSetting == 'learningPIT':
+            processLaborTracking(learningPIT)
     
-except Exception as e:
-    successPopup(e)
+    except Exception as e:
+        successPopup(e)
