@@ -32,7 +32,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 
 # file_pattern = 'staffingBoard_P*.xlsm'
-excel_file_path = "C:/Users/adn51/Downloads/StaffingBoard_P1.xlsm"
+# excel_file_path = "C:/Users/adn51/Downloads/StaffingBoard_P1.xlsm"
+excel_file_path = "C:/Users/nuneadon/Downloads/StaffingBoard_P1.xlsm"
 
 nrow = { #sheet name > path > role > number of rows down
     'PS_ICQA_Learning': {
@@ -49,7 +50,7 @@ nrow = { #sheet name > path > role > number of rows down
         'runner': 5,
         'UIS': 5,
         'CPT Chase': 5,
-        'Pick Skips': 5,
+        'Pick Skips': 6,
         'general' : 13,
         'pit': 13
     },
@@ -165,7 +166,6 @@ def LT(badgeIDs, laborPath):
     HELPER_typeAndClick(input_element,laborPath)
     input_element = driver.find_element('xpath', '//*[@id="trackingBadgeId"]')
     HELPER_typeAndClick(input_element,badgeIDs)
-    successPopup()
 
     
 def named_range(range_start, laborPath_label, excel_path=excel_file_path):
@@ -277,8 +277,11 @@ except IndexError:
     sys.exit(1)
 
 if badge != '-':
-     LT(str(badge),laborSetting)
-     successPopup(f'Group Labor Tracked: {badge}\nCALM: {laborSetting}')
+    try:
+        LT(str(badge),laborSetting)
+        successPopup(f'Group Labor Tracked: {badge}\nCALM: {laborSetting}')
+    except Exception as e:
+        print(e)
 else:
     try:
         if laborSetting == 'counts':
