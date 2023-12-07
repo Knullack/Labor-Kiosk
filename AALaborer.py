@@ -261,9 +261,6 @@ def learningPIT():
     arg = laborPath['LearningPIT']
     return badges(arg[0], arg[1]), arg[2]
 
-
-
-
 def processLaborTracking(function):
     badges, CALM = function()
     # LT(badges,CALM)
@@ -277,7 +274,6 @@ try:
     # badge = ''
 except IndexError:
     successPopup("Error: Path variable not provided in command")
-    # Handle the error or exit the script as needed
     sys.exit(1)
 
 if (isinstance(badge, (int, float))):
@@ -316,6 +312,5 @@ else:
             processLaborTracking(learningGeneral)
         elif laborSetting == 'learningPIT':
             processLaborTracking(learningPIT)
-    
     except Exception as e:
         successPopup(e)
