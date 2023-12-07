@@ -146,7 +146,7 @@ def LT(badgeIDs, laborPath):
     website_url = "https://fcmenu-iad-regionalized.corp.amazon.com/HDC3/laborTrackingKiosk"
     options = Options()
     options.add_argument("--headless")
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(options=options)
     driver.get(website_url)
 
     # Find an input field and type characters
@@ -271,13 +271,14 @@ try:
     badge = sys.argv[2]
 
     # laborSetting = 'palletRacking'
-    # badge = ''
+    # badge = '-'
 except IndexError:
     successPopup("Error: Path variable not provided in command")
     sys.exit(1)
 
-if (isinstance(badge, (int, float))):
-     LT(str(badge),laborSetting,)
+if badge != '-':
+     LT(str(badge),laborSetting)
+     successPopup(f'Group Labor Tracked: {badge}\nCALM: {laborSetting}')
 else:
     try:
         if laborSetting == 'counts':
