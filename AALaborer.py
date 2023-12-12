@@ -26,6 +26,18 @@ except ImportError:
     except subprocess.CalledProcessError as e:
         print(f"Error installing Selenium: {e}")
         sys.exit(1)
+try:
+    importlib.import_module('openpyxl')
+except ImportError:
+    print("openpyxl is not installed. Installing it now...")
+
+    # Run a script to install Selenium using subprocess
+    try:
+        subprocess.run([sys.executable, '-m', 'pip', 'install', 'openpyxl'], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error installing Selenium: {e}")
+        sys.exit(1)
+
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -278,6 +290,7 @@ except IndexError:
 
 if badge != '-':
      LT(str(badge),laborSetting)
+     
      successPopup(f'Group Labor Tracked: {badge}\nCALM: {laborSetting}')
 else:
     try:
