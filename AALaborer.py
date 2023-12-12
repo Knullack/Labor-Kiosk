@@ -1,7 +1,6 @@
 import sys
 import importlib
 import subprocess
-import sys
 #check if pandas is is installed
 try:
     importlib.import_module('pandas')
